@@ -1,18 +1,25 @@
 using Core.Entities;
 using Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
     public class CustomerRepository : ICustomerRepository
     {
-        public Task<Customer> GetCustomerByIdAsync(int id)
+        private readonly StoreContext _context;
+        public CustomerRepository(StoreContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<IReadOnlyList<Customer>> GetCustomersAsync()
+        public async Task<Customer> GetCustomerByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Customers.FindAsync(id);
+        }
+
+        public async Task<IReadOnlyList<Customer>> GetCustomersAsync()
+        {
+            return await _context.Customers.ToListAsync();
         }
     }
 }
